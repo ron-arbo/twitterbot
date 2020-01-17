@@ -1,5 +1,6 @@
 from selenium import webdriver
 from time import sleep
+from secret import username, password
 
 class TwitterBot:
     def __init__(self, username, password):
@@ -60,5 +61,5 @@ class TwitterBot:
 #             driver.execute_script('window.scrollTo(0, document.body.scrollHeight)')
 #             sleep(2)
 
-bot = TwitterBot("username", "password")
+bot = TwitterBot(username, password)
 bot.tweet()
