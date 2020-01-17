@@ -42,5 +42,5 @@ class TwitterBot:
 
         
 
-bot = TwitterBot("funkyduckling39", "the_DUCK22")
+bot = TwitterBot("username", "password")
 bot.retweet()
