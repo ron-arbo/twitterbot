@@ -1,10 +1,14 @@
 from selenium import webdriver
 from time import sleep
+import random
 from secret import username, password
+from tweets import duckTweets
 
 class TwitterBot:
-    def __init__(self, username, password):
+    def __init__(self):
         self.driver = webdriver.Chrome()
+
+    def logIn(self, username, password):
         self.driver.get("https://twitter.com")
         sleep(2)
 
@@ -36,22 +40,36 @@ class TwitterBot:
         driver = self.driver
         #Find tweet xpath, rt if above a certain rt count
         tweets = driver.find_elements_by_xpath("//div[@data-testid='tweet']")
-        rtButtons = driver.find_elements_by_xpath("//div[data-testid='retweet']")
+        rtButtons = driver.find_elements_by_xpath("//div[@data-testid='retweet']")
 
         #Doesn't work yet, rtButtons not returning anything
         for rtButton in rtButtons:
             rtButton.click()
-            confirm = driver.find_element_by_xpath("//div[data-testid='retweetConfirm']")
+            sleep(2)
+            confirm = driver.find_element_by_xpath("//div[@data-testid='retweetConfirm']")
+            confirm.click()
             sleep(2)
 
 
+    def findQuotes(self):
+        driver = self.driver
+        driver.get("https://www.brainyquote.com/topics/duck-quotes")
+
+        quotes = driver.find_elements_by_xpath()
+
     def tweet(self):
         driver = self.driver
-        #The duck will tweet "Let's get this bread" (lol, cuz he's a duck)
+
+        #Select tweet button
         tweetButton = driver.find_element_by_xpath("/html/body/div/div/div/div/header/div/div/div/div/div[3]/a/div")
         tweetButton.click()
+        
+        #Select blank, send tweet
         blankLine = driver.find_element_by_xpath("/html/body/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div[1]/div[1]/div/div/div/div[2]/div/div/div/div")
-        blankLine.send_keys("Let's get this bread")
+        tweet = random.choice(duckTweets)
+        blankLine.send_keys(tweet)
+
+        #Submit tweet
         submitButton = driver.find_element_by_xpath("/html/body/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div[1]/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]/div/span/span")
         submitButton.click()
 
@@ -61,5 +79,7 @@ class TwitterBot:
 #             driver.execute_script('window.scrollTo(0, document.body.scrollHeight)')
 #             sleep(2)
 
-bot = TwitterBot(username, password)
-bot.tweet()
+bot = TwitterBot()
+bot.logIn(username, password)
+#bot.findQuotes()
+bot.retweet()
