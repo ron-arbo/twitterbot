@@ -33,14 +33,32 @@ class TwitterBot:
 
     def retweet(self):
         driver = self.driver
+        #Find tweet xpath, rt if above a certain rt count
+        tweets = driver.find_elements_by_xpath("//div[@data-testid='tweet']")
+        rtButtons = driver.find_elements_by_xpath("//div[data-testid='retweet']")
 
-        #Scroll to load tweets
-        for i in range(1, 5):
-            driver.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+        #Doesn't work yet, rtButtons not returning anything
+        for rtButton in rtButtons:
+            rtButton.click()
+            confirm = driver.find_element_by_xpath("//div[data-testid='retweetConfirm']")
             sleep(2)
-            
 
-        
+
+    def tweet(self):
+        driver = self.driver
+        #The duck will tweet "Let's get this bread" (lol, cuz he's a duck)
+        tweetButton = driver.find_element_by_xpath("/html/body/div/div/div/div/header/div/div/div/div/div[3]/a/div")
+        tweetButton.click()
+        blankLine = driver.find_element_by_xpath("/html/body/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div[1]/div[1]/div/div/div/div[2]/div/div/div/div")
+        blankLine.send_keys("Let's get this bread")
+        submitButton = driver.find_element_by_xpath("/html/body/div/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div[3]/div/div/div[1]/div/div/div/div[2]/div[2]/div/div/div[2]/div[4]/div/span/span")
+        submitButton.click()
+
+
+#scrolling:
+# for i in range(1, 2):
+#             driver.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+#             sleep(2)
 
 bot = TwitterBot("username", "password")
-bot.retweet()
+bot.tweet()
